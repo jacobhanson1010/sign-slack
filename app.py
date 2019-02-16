@@ -1,13 +1,22 @@
 import os
 
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def slash_command():
-    return 'Hello World!'
+    text = str(request.form.get('&text'))
+    if text == 'on':  # set sign to on
+        print('sign turned on')
+        return 'sign turned on!'
+    elif text == 'off':  # set sign to off
+        print('sign turned off')
+        return 'sign turned off!'
+
+    print('invalid request text was ' + text)
+    return text + ' is not a valid command!'
 
 
 if __name__ == '__main__':
