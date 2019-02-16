@@ -38,8 +38,9 @@ def turn_off():
 
     on_off = False
     print('sign turned off')
-    event.cancel()
-    print('turn_off() schedule canceled')
+    if event is not None:
+        event.cancel()
+        print('turn_off() schedule canceled')
 
 
 @app.route('/', methods=['POST'])
