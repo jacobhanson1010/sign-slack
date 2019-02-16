@@ -1,10 +1,20 @@
 import os
 import threading
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 on_off = False
 event = None
+
+
+def format_response(response, ephemeral=False):
+    response_dict = {'text': response}
+    if ephemeral == True:
+        response_dict['response_type'] = 'ephemeral'
+    else:
+        response_dict['response_type'] = 'in_channel'
+
+    return jsonify(response_dict)
 
 
 def turn_on():
@@ -35,18 +45,20 @@ def turn_off():
 @app.route('/', methods=['POST'])
 def slash_command():
     text = str(request.form.get('text')).lower().strip()
+    user_name = str(request.form.get('user_name')).strip()
+
     if text == 'on':  # set sign to on
         turn_on()
-        return 'sign turned on for 15 minutes!'
+        return format_response(user_name + ' turned the sign on for 15 minutes!')
     elif text == 'off':  # set sign to off
         turn_off()
-        return 'sign turned off!'
+        return format_response(user_name + ' turned the sign off!')
     elif text == '':  # set sign to on
         turn_on()
-        return 'sign tuned on for 15 minutes!'
+        return format_response(user_name + ' turned the sign on for 15 minutes!')
 
     print('invalid request text was ' + text)
-    return '[' + text + '] is not a valid command!'
+    return format_response('[' + text + '] is not a valid command!', True)
 
 
 @app.route('/', methods=['GET'])
