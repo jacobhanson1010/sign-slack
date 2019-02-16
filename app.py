@@ -34,7 +34,7 @@ def turn_off():
 
 @app.route('/', methods=['POST'])
 def slash_command():
-    text = str(request.form.get('&text')).lower().strip()
+    text = str(request.form.get('text')).lower().strip()
     if text == 'on':  # set sign to on
         turn_on()
         return 'sign turned on for 15 minutes!'
