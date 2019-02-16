@@ -41,6 +41,9 @@ def slash_command():
     elif text == 'off':  # set sign to off
         turn_off()
         return 'sign turned off!'
+    elif text == '':  # set sign to on
+        turn_on()
+        return 'sign tuned on for 15 minutes!'
 
     print('invalid request text was ' + text)
     return '[' + text + '] is not a valid command!'
