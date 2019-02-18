@@ -1,6 +1,6 @@
 import os
 import threading
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 
 app = Flask(__name__)
 on_off = False
@@ -47,6 +47,10 @@ def turn_off():
 def slash_command():
     text = str(request.form.get('text')).lower().strip()
     user_name = str(request.form.get('user_name')).strip()
+    token = str(request.form.get('token')).strip()
+
+    if token != str(os.environ.get('SLACK_TOKEN', 'token')):
+        return make_response('invalid slack token', 401)
 
     if text == 'on':  # set sign to on
         turn_on()
